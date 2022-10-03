@@ -26,12 +26,18 @@ public class EmbeddedKafkaConfig {
 
         private final Properties properties = new Properties();
         private int numberOfBrokers = DEFAULT_NUMBER_OF_BROKERS;
+        private List<Integer> dedicatedPortsList = new ArrayList<>();
 
         private EmbeddedKafkaConfigBuilder() {
         }
 
         public EmbeddedKafkaConfigBuilder withNumberOfBrokers(final int numberOfBrokers) {
             this.numberOfBrokers = numberOfBrokers;
+            return this;
+        }
+
+        public EmbeddedKafkaConfigBuilder withNumberDedicatedBrokers(final List<Integer> dedicatedPortsList) {
+            this.dedicatedPortsList = dedicatedPortsList;
             return this;
         }
 
@@ -55,10 +61,11 @@ public class EmbeddedKafkaConfig {
             final List<String> listeners = new ArrayList<>(numberOfBrokers);
 
             if (numberOfBrokers > 1) {
-                listeners.addAll(getUniqueEphemeralPorts(numberOfBrokers)
-                        .stream()
-                        .map(port -> String.format(LISTENER_TEMPLATE, port))
-                        .collect(Collectors.toList()));
+                listeners.addAll(( dedicatedPortsList.size() > 0 ? dedicatedPortsList :
+                        getUniqueEphemeralPorts(numberOfBrokers))
+                                          .stream()
+                                          .map(port -> String.format(LISTENER_TEMPLATE, port))
+                                          .collect(Collectors.toList()));
             } else {
                 listeners.add(DEFAULT_LISTENER);
             }
