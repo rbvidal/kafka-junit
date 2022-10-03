@@ -36,7 +36,7 @@ public class EmbeddedKafkaConfig {
             return this;
         }
 
-        public EmbeddedKafkaConfigBuilder withNumberDedicatedBrokers(final List<Integer> dedicatedPortsList) {
+        public EmbeddedKafkaConfigBuilder withDedicatedPortsForBrokers(final List<Integer> dedicatedPortsList) {
             this.dedicatedPortsList = dedicatedPortsList;
             return this;
         }
