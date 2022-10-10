@@ -34,10 +34,11 @@ class MultipleBrokersWithDedicatedPortsTest {
 
     @BeforeEach
     void prepareEnvironment() {
+
         kafka = provisionWith(newClusterConfig()
                 .configure(brokers()
                         .withNumberOfBrokers(3)
-                        .withNumberDedicatedBrokers(List.of(9092, 9093, 9094))
+                        .withDedicatedPortsForBrokers(List.of(9092, 9093, 9094))
                         .with(KafkaConfig$.MODULE$.TransactionsTopicReplicationFactorProp(), "1")
                         .with(KafkaConfig$.MODULE$.TransactionsTopicMinISRProp(), "1")));
         kafka.start();
